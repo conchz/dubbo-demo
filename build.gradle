@@ -1,0 +1,68 @@
+group 'com.github.lavenderx'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    ext.springbootVersion = '1.5.8.RELEASE'
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:$springbootVersion"
+    }
+}
+
+allprojects {
+    apply plugin: 'idea'
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'scala'
+    apply plugin: 'org.springframework.boot'
+
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+
+    [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+    }
+
+    sourceSets {
+        main {
+            scala {
+                srcDirs = ['src/main/java', 'src/main/scala']
+            }
+            java {
+                srcDirs = []
+            }
+        }
+
+        test {
+            scala {
+                srcDirs = ['src/test/java', 'src/test/scala']
+            }
+            java {
+                srcDirs = []
+            }
+        }
+    }
+
+    dependencies {
+        compile 'com.gitee.reger:spring-boot-starter-dubbo:1.0.7'
+        compile 'org.scala-lang:scala-library:2.11.11'
+        compile 'org.projectlombok:lombok:1.16.18'
+        compile 'de.javakaffee:kryo-serializers:0.42'
+    }
+
+    tasks.withType(ScalaCompile) {
+        configure(scalaCompileOptions.forkOptions) {
+            memoryMaximumSize = '1g'
+            jvmArgs = ['-XX:MaxMetaspaceSize=512m']
+        }
+    }
+}

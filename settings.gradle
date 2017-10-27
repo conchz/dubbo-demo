@@ -1,0 +1,6 @@
+rootProject.name = 'dubbo-demo'
+
+include 'demo-api'
+include 'demo-provider'
+include 'demo-consumer'
+
